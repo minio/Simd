@@ -215,6 +215,8 @@ extern "C"
     */
     SIMD_API const char * SimdVersion();
 
+    SIMD_API const char * SimdDetectObjects(size_t n);
+
     /*! @ingroup memory
 
         \fn void * SimdAllocate(size_t size, size_t align);

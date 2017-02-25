@@ -64,7 +64,55 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReasonForCall, LPVOID lpReserved)
 #include "Simd/SimdVsx.h"
 #include "Simd/SimdNeon.h"
 
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <thread>
+
+#include "Simd/SimdDetection.hpp"
+#include "Simd/SimdDrawing.hpp"
+
 using namespace Simd;
+ 
+SIMD_API const char * SimdDetectObjects(size_t n)
+{
+    typedef Simd::Detection<Simd::Allocator> Detection;
+
+    Detection::View image;
+    if (!image.Load("/home/ec2-user/c_apps/Simd/data/image/face/lena.pgm"))
+    {
+        std::cout << "Error loading image: " << std::endl;
+        return "-1";
+    }
+
+    Detection detection;
+
+    detection.Load("/home/ec2-user/c_apps/Simd/data/cascade/haar_face_0.xml");
+
+    detection.Init(image.Size(), 1.1, Detection::Size(0, 0), Detection::Size(INT_MAX, INT_MAX), Detection::View(), -1);
+
+    Detection::Objects objects;
+    for (int i = 0; i < n; i++) {
+       detection.Detect(image, objects);
+    }
+
+    std::ostringstream ss;
+
+    ss << "{ objects: [" << std::endl;
+
+    for (size_t i = 0; i < objects.size(); ++i) {
+	if (i != 0) {
+            ss << "," << std::endl;
+        }
+        ss << "    { top: " << objects[i].rect.top << ", left: " << objects[i].rect.left << ", bottom: " << objects[i].rect.bottom <<", right: " << objects[i].rect.right << " }";
+    }
+
+    ss << std::endl << "] }";
+
+    std::string* pstr = new std::string(ss.str());
+    return pstr->c_str();	// Intentially leak it for now
+}
 
 SIMD_API const char * SimdVersion()
 {
