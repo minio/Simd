@@ -215,7 +215,8 @@ extern "C"
     */
     SIMD_API const char * SimdVersion();
 
-    SIMD_API const char * SimdDetectObjects(size_t n);
+    SIMD_API const void * SimdDetectInitialize(const char *cascade);
+    SIMD_API const char * SimdDetectObjects(const void* pCvMat, const void *detect);
 
     /*! @ingroup memory
 

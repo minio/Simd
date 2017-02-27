@@ -74,28 +74,40 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReasonForCall, LPVOID lpReserved)
 #include "Simd/SimdDrawing.hpp"
 
 using namespace Simd;
- 
-SIMD_API const char * SimdDetectObjects(size_t n)
+
+SIMD_API const void * SimdDetectInitialize(const char *cascade)
 {
     typedef Simd::Detection<Simd::Allocator> Detection;
 
-    Detection::View image;
-    if (!image.Load("/home/ec2-user/c_apps/Simd/data/image/face/lena.pgm"))
-    {
-        std::cout << "Error loading image: " << std::endl;
-        return "-1";
-    }
+    Detection* detection = new Detection;
+    detection->Load(cascade);
 
-    Detection detection;
+    return detection;;
+}
 
-    detection.Load("/home/ec2-user/c_apps/Simd/data/cascade/haar_face_0.xml");
+SIMD_API const char * SimdDetectObjects(const void *pCvMat, const void *detect)
+{
+    typedef Simd::View<Simd::Allocator> View;
+    typedef Simd::Detection<Simd::Allocator> Detection;
 
-    detection.Init(image.Size(), 1.1, Detection::Size(0, 0), Detection::Size(INT_MAX, INT_MAX), Detection::View(), -1);
+    uint* pui = (uint*)pCvMat;
+    uint64_t* pui64 = (uint64_t*)pCvMat;
+
+    View::Format type = (View::Format)3; // View::Format::OcvTo(CV_MAT_TYPE(pui[0]));
+    uint stride = pui[1];
+    void* data = (void*)pui64[1];
+    uint rows = pui[8];
+    uint cols = pui[9];    
+    
+    Detection::View image(cols, rows, stride, type, data); // src is a reference to pCvMat, it is not a copy!
+    
+    // std::cout << "width: " << image.width << ", height: " << image.height << ", stride: " << image.stride << ", format: " << image.format << std::endl;
+
+    Detection* detection = (Detection*)detect;
+    detection->Init(image.Size(), 1.1, Detection::Size(0, 0), Detection::Size(INT_MAX, INT_MAX), Detection::View(), -1);
 
     Detection::Objects objects;
-    for (int i = 0; i < n; i++) {
-       detection.Detect(image, objects);
-    }
+    detection->Detect(image, objects);
 
     std::ostringstream ss;
 
