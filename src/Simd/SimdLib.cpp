@@ -111,13 +111,13 @@ SIMD_API const char * SimdDetectObjects(const void *pCvMat, const void *detect)
 
     std::ostringstream ss;
 
-    ss << "{ objects: [" << std::endl;
+    ss << "{ \"Objects\": [" << std::endl;
 
     for (size_t i = 0; i < objects.size(); ++i) {
 	if (i != 0) {
             ss << "," << std::endl;
         }
-        ss << "    { top: " << objects[i].rect.top << ", left: " << objects[i].rect.left << ", bottom: " << objects[i].rect.bottom <<", right: " << objects[i].rect.right << " }";
+        ss << "    { \"Top\": " << objects[i].rect.top << ", \"Left\": " << objects[i].rect.left << ", \"Bottom\": " << objects[i].rect.bottom <<", \"Right\": " << objects[i].rect.right << " }";
     }
 
     ss << std::endl << "] }";
