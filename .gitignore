@@ -1,2 +1,10 @@
 src/Simd/SimdVersion.h
 prj/txt/FullVersion.txt
+cmake-build
+CMakeCache.txt
+CMakeFiles/
+Makefile
+Simd.pc
+cmake_install.cmake
+*.a
+*~

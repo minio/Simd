@@ -1,10 +1,9 @@
 echo "Try to estimate SVN revision:"
 
-TRUNK_DIR="../.."
-USER_VERSION_TXT="$TRUNK_DIR/prj/txt/UserVersion.txt"
-FULL_VERSION_TXT="$TRUNK_DIR/prj/txt/FullVersion.txt"
-SIMD_VERSION_H="$TRUNK_DIR/src/Simd/SimdVersion.h"
-SIMD_VERSION_H_TXT="$TRUNK_DIR/prj/txt/SimdVersion.h.txt"
+USER_VERSION_TXT="prj/txt/UserVersion.txt"
+FULL_VERSION_TXT="prj/txt/FullVersion.txt"
+SIMD_VERSION_H="src/Simd/SimdVersion.h"
+SIMD_VERSION_H_TXT="prj/txt/SimdVersion.h.txt"
 
 if [ -e "$FULL_VERSION_TXT" ]
 then
@@ -17,11 +16,11 @@ cp $USER_VERSION_TXT $FULL_VERSION_TXT
 which svn > /dev/null
 if [ $? -eq 0 ];
 then
-	SVN_INFO=`svn info $TRUNK_DIR`
+	SVN_INFO=`svn info`
 	if [ $? -eq 0 ] 
 	then
 		printf . >>$FULL_VERSION_TXT
-		svn info $TRUNK_DIR | grep Revision: | cut -c11->>$FULL_VERSION_TXT
+		svn info | grep Revision: | cut -c11->>$FULL_VERSION_TXT
 	fi
 else
 	echo "Subversion is not installed!"
