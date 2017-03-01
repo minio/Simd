@@ -1,4 +1,4 @@
-#Introduction
+# Introduction
 
 The [Simd Library](http://simd.sourceforge.net) is a free open source image processing library, designed for C and C++ programmers. 
 It provides many useful high performance algorithms for image processing such as: 
@@ -13,7 +13,7 @@ The Simd Library has C API and also contains useful C++ classes and functions to
 The library supports dynamic and static linking, 32-bit and 64-bit Windows and Linux, 
 MSVS, G++ and Clang compilers, MSVS project and CMake build systems.
 
-#Library folder's structure
+# Library folder's structure
 
 The Simd Library has next folder's structure:
 
@@ -30,7 +30,7 @@ The Simd Library has next folder's structure:
 * `simd/doc/` - contains documentation of the library.
 * `simd/doc/src/` - contains scripts for generation of this documentation by doxygen.
 
-#The library building for Windows
+# The library building for Windows
 
 To build the library and test application for Windows 32/64 you need to use Microsoft Visual Studio 2015. 
 These project files are in the directory: 
@@ -43,7 +43,7 @@ To do this you must change appropriate property (Configuration Type) of **Simd**
 
 `simd/src/Simd/SimdConfig.h`
 
-#The library building for Linux
+# The library building for Linux
 
 To build the library and test application for Linux 32/64 you need to use CMake build systems.
 Files of CMake build systems are placed in the directory:
@@ -55,30 +55,32 @@ With using of native compiler (g++) for current platform it is simple:
 
 	cd ./prj/cmake
 	cmake . -DTOOLCHAIN="" -DTARGET=""
-	make
+	make install
 	
 To build the library for PowePC(64) and ARM(32/64) platforms you can also use toolchain for cross compilation.
 There is an example of using for PowerPC (64 bit):
 
 	cd ./prj/cmake
 	cmake . -DTOOLCHAIN="/path_to_your_toolchain/usr/bin/powerpc-linux-g++" -DTARGET="ppc64" -DCMAKE_BUILD_TYPE="Release"
-	make
+	make install
 	
 For ARM (32 bit):
 
 	cd ./prj/cmake
 	cmake . -DTOOLCHAIN="/path_to_your_toolchain/usr/bin/arm-linux-gnueabihf-g++" -DTARGET="arm" -DCMAKE_BUILD_TYPE="Release"
 	make
+        make install
 	
 And for ARM (64 bit):
 
     cd ./prj/cmake
     cmake . -DTOOLCHAIN="/path_to_your_toolchain/usr/bin/aarch64-linux-gnu-g++" -DTARGET="aarch64" -DCMAKE_BUILD_TYPE="Release"
     make
+	make install
 
 As result the library and the test application will be built in the current directory.
 
-#The library using
+# The library using
 
 If you use the library from C code you must include:
 	
@@ -92,7 +94,7 @@ In order to use [Simd::Detection](http://simd.sourceforge.net/help/struct_simd_1
 
     #include "Simd/SimdDetection.hpp"
 	
-#Test Framework
+# Test Framework
 
 The test suite is needed for testing of correctness of work of the library and also for its performance testing.
 There is a set of tests for every function from API of the library. 
