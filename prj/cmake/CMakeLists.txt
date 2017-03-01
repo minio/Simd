@@ -1,5 +1,14 @@
 cmake_minimum_required(VERSION 2.8)
 
+project(Simd)
+
+set(SIMD_DESCRIPTION "Image processing library using SIMD")
+set(SIMD_MAJOR_VERSION 3)
+set(SIMD_MINOR_VERSION 4)
+set(SIMD_PATCH_VERSION 50.872)
+
+set(SIMD_VERSION
+  ${SIMD_MAJOR_VERSION}.${SIMD_MINOR_VERSION}.${SIMD_PATCH_VERSION})
 set(TRUNK_DIR ${CMAKE_SOURCE_DIR}/../..)
 
 if(CMAKE_BUILD_TYPE STREQUAL "")
@@ -28,6 +37,8 @@ message("CMAKE_SYSTEM_PROCESSOR = '${CMAKE_SYSTEM_PROCESSOR}'")
 if((CMAKE_SYSTEM_PROCESSOR STREQUAL "i686") OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64"))
 
 set(COMMON_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC -O3")
+set(LIBRARIES SimdBase SimdSse1 SimdSse2 SimdSse3 SimdSsse3 SimdSse41 SimdSse42 SimdAvx1 SimdAvx2 Simd)
+set(SIMD_LDFLAGS "-lSimdBase -lSimdSse1 -lSimdSse2 -lSimdSse3 -lSimdSsse3 -lSimdSse41 -lSimdSse42 -lSimdAvx1 -lSimdAvx2 -lSimd -lm -lstdc++")
 
 file(GLOB_RECURSE SIMD_BASE_SOURCES ${TRUNK_DIR}/src/Simd/SimdBase*.cpp)
 add_library(SimdBase STATIC ${SIMD_BASE_SOURCES})
@@ -84,6 +95,8 @@ endif()
 elseif((CMAKE_SYSTEM_PROCESSOR STREQUAL "ppc") OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "ppc64"))
 
 set(COMMON_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -O3")
+set(LIBRARIES SimdBase SimdVmx SimdVsx Simd)
+set(SIMD_LDFLAGS "-lSimdBase -lSimdVmx -lSimdVsx -lm -lstdc++")
 
 file(GLOB_RECURSE SIMD_BASE_SOURCES ${TRUNK_DIR}/src/Simd/SimdBase*.cpp)
 add_library(SimdBase STATIC ${SIMD_BASE_SOURCES})
@@ -123,6 +136,9 @@ else()
 set(CXX_NEON_FLAG "")
 endif() 
 
+set(LIBRARIES SimdBase SimdNeon Simd)
+set(SIMD_LDFLAGS "-lSimdBase -lSimdNeon -lSimd -lm -lstdc++")
+
 file(GLOB_RECURSE SIMD_BASE_SOURCES ${TRUNK_DIR}/src/Simd/SimdBase*.cpp)
 add_library(SimdBase STATIC ${SIMD_BASE_SOURCES})
 set_target_properties(SimdBase PROPERTIES COMPILE_FLAGS "${COMMON_CXX_FLAGS}")
@@ -150,3 +166,30 @@ endif()
 else()
 message(FATAL_ERROR "Unknown value of CMAKE_SYSTEM_PROCESSOR!")
 endif()
+
+set(PKG_CONFIG_LIBDIR
+  "\${prefix}/lib"
+  )
+set(PKG_CONFIG_INCLUDEDIR
+  "\${prefix}/include"
+  )
+set(PKG_CONFIG_LIBS
+  "-L\${libdir} ${SIMD_LDFLAGS}"
+  )
+set(PKG_CONFIG_CFLAGS
+  "-I\${includedir}"
+  )
+
+configure_file(
+  "${PROJECT_NAME}.pc.in"
+  "${PROJECT_NAME}.pc"
+  )
+
+
+install(DIRECTORY ${TRUNK_DIR}/src/Simd DESTINATION include
+  FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY ${TRUNK_DIR}/src/Simd DESTINATION include
+  FILES_MATCHING PATTERN "*.hpp")
+
+install(TARGETS ${LIBRARIES} ARCHIVE DESTINATION lib)
+install(FILES ${PROJECT_NAME}.pc DESTINATION lib/pkgconfig)
