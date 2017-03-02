@@ -1,4 +1,3 @@
-src/Simd/SimdVersion.h
 prj/txt/FullVersion.txt
 cmake-build
 CMakeCache.txt
