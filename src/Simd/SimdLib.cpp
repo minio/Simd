@@ -85,24 +85,15 @@ SIMD_API const void * SimdDetectInitialize(const char *cascade)
     return detection;;
 }
 
-SIMD_API const char * SimdDetectObjects(const void *pCvMat, const void *detect)
+SIMD_API const char * SimdDetectObjectsRaw(const int cols, const int rows, const int stride, void *data, const void *detect)
 {
     typedef Simd::View<Simd::Allocator> View;
     typedef Simd::Detection<Simd::Allocator> Detection;
 
-    uint* pui = (uint*)pCvMat;
-    uint64_t* pui64 = (uint64_t*)pCvMat;
-
-    View::Format type = (View::Format)3; // View::Format::OcvTo(CV_MAT_TYPE(pui[0]));
-    uint stride = pui[1];
-    void* data = (void*)pui64[1];
-    uint rows = pui[8];
-    uint cols = pui[9];    
+    // TODO - make this configurable.    
+    View::Format type = (View::Format)SimdPixelFormatBgr24;
+    Detection::View image(cols, rows, stride, type, data);
     
-    Detection::View image(cols, rows, stride, type, data); // src is a reference to pCvMat, it is not a copy!
-    
-    // std::cout << "width: " << image.width << ", height: " << image.height << ", stride: " << image.stride << ", format: " << image.format << std::endl;
-
     Detection* detection = (Detection*)detect;
     detection->Init(image.Size(), 1.1, Detection::Size(0, 0), Detection::Size(INT_MAX, INT_MAX), Detection::View(), -1);
 
@@ -123,7 +114,20 @@ SIMD_API const char * SimdDetectObjects(const void *pCvMat, const void *detect)
     ss << std::endl << "] }";
 
     std::string* pstr = new std::string(ss.str());
-    return pstr->c_str();	// Intentially leak it for now
+    return pstr->c_str(); // Intentially leak it for now  
+};
+
+SIMD_API const char * SimdDetectObjects(const void *pCvMat, const void *detect)
+{
+    uint* pui = (uint*)pCvMat;
+    uint64_t* pui64 = (uint64_t*)pCvMat;
+
+    uint stride = pui[1];
+    void* data = (void*)pui64[1];
+    uint rows = pui[8];
+    uint cols = pui[9];    
+
+    return SimdDetectObjectsRaw(cols, rows, stride, data, detect);
 }
 
 SIMD_API const char * SimdVersion()
