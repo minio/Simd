@@ -1212,6 +1212,11 @@ SIMD_API void * SimdDetectionLoadA(const char * path)
     return Base::DetectionLoadA(path);
 }
 
+SIMD_API void * SimdDetectionLoadABuf(const void *data, const int dataLen)
+{
+    return Base::DetectionLoadABuf(data, dataLen);
+}
+
 SIMD_API void SimdDetectionInfo(const void * data, size_t * width, size_t * height, SimdDetectionInfoFlags * flags)
 {
     Base::DetectionInfo(data, width, height, flags);

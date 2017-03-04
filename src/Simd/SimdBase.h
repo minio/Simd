@@ -160,6 +160,8 @@ namespace Simd
 
         void * DetectionLoadA(const char * path);
 
+        void * DetectionLoadABuf(const void *data, const int dataLen);
+
         void DetectionInfo(const void * data, size_t * width, size_t * height, SimdDetectionInfoFlags * flags);
 
         void * DetectionInit(const void * data, uint8_t * sum, size_t sumStride, size_t width, size_t height,

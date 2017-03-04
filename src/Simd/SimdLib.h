@@ -1512,6 +1512,7 @@ extern "C"
     */
     SIMD_API void * SimdDetectionLoadA(const char * path);
 
+    SIMD_API void * SimdDetectionLoadABuf(const void *data, const int dataLen);
     /*! @ingroup object_detection
 
         \fn void SimdDetectionInfo(const void * data, size_t * width, size_t * height, SimdDetectionInfoFlags * flags);
