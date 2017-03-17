@@ -216,6 +216,7 @@ extern "C"
     SIMD_API const char * SimdVersion();
 
     SIMD_API const void * SimdDetectInitialize(const char *cascade);
+    SIMD_API const void * SimdDetectInitializeBuf(const void *buf, int bufSize);
     SIMD_API const char * SimdDetectObjects(const void* pCvMat, const void *detect);
     SIMD_API const char * SimdDetectObjectsRaw(const int cols, const int rows, const int stride, void *data, const void *detect);
 

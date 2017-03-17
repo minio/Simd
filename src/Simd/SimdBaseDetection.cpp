@@ -181,7 +181,7 @@ namespace Simd
                 }
                 else
                     SIMD_EX("Invalid cascade feature type!")
-
+                      
                     data->origWinSize.x = Xml::GetValue<int>(cascade, Names::width);
                 data->origWinSize.y = Xml::GetValue<int>(cascade, Names::height);
                 if (data->origWinSize.x <= 0 || data->origWinSize.y <= 0)

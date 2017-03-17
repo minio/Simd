@@ -161,6 +161,20 @@ namespace Simd
             return handle != NULL;
         }
 
+        bool LoadBuf(const void *buf, int bufSize, Tag tag = UNDEFINED_OBJECT_TAG)
+        {
+            Handle handle = ::SimdDetectionLoadABuf(buf, bufSize);
+            if (handle)
+            {
+                Data data;
+                data.handle = handle;
+                data.tag = tag;
+                ::SimdDetectionInfo(handle, (size_t*)&data.size.x, (size_t*)&data.size.y, &data.flags);
+                _data.push_back(data);
+            }
+            return handle != NULL;
+        }
+          
         /*!
             Prepares Detection structure to work with image of given size. 
 

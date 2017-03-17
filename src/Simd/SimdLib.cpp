@@ -85,6 +85,16 @@ SIMD_API const void * SimdDetectInitialize(const char *cascade)
     return detection;;
 }
 
+SIMD_API const void * SimdDetectInitializeBuf(const void *buf, int bufSize)
+{
+    typedef Simd::Detection<Simd::Allocator> Detection;
+
+    Detection* detection = new Detection;
+    detection->LoadBuf(buf, bufSize);
+
+    return detection;;
+}
+
 SIMD_API const char * SimdDetectObjectsRaw(const int cols, const int rows, const int stride, void *data, const void *detect)
 {
     typedef Simd::View<Simd::Allocator> View;
